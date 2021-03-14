@@ -2,10 +2,15 @@ import express from 'express'
 import dotenv from 'dotenv'
 import helmet from 'helmet'
 import morgan from 'morgan'
+import mongoose from 'mongoose'
+import bodyParser from 'body-parser'
+import UserRoutes from './src/routes/User.routes.js'
 
 dotenv.config() //instansiera
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json()) //berättar att vi använder json
 app.use(helmet())
 app.use(morgan('common'))
 
@@ -22,6 +27,22 @@ app.get //read
 app.get("/product", (req, res) => {
     res.send("Yaay!")
 })
+
+//skickar med app till routes, för routes ska nå post
+UserRoutes.routes(app)
+
+mongoose.connect('mongodb://localhost/db', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+    .then(() => console.log('Connected to DB!'))
+    .catch(() => {
+        console.log('Something went wrong when connecting to DB..')
+        process.exit()
+    }
+    )
+
+
 
 app.listen(port, () => {
     console.log(`Running on port ${port}`)
