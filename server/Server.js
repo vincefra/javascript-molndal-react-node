@@ -9,8 +9,11 @@ import UserRoutes from './src/routes/User.routes.js'
 dotenv.config() //instansiera
 
 const app = express()
+
+//gör kunna nå komplex objekt aka nested
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json()) //berättar att vi använder json
+
 app.use(helmet())
 app.use(morgan('common'))
 
@@ -41,8 +44,6 @@ mongoose.connect('mongodb://localhost/db', {
         process.exit()
     }
     )
-
-
 
 app.listen(port, () => {
     console.log(`Running on port ${port}`)
