@@ -9,7 +9,7 @@ Chai.should()
 Chai.use(ChaiHTTP)
 
 const randomstring = Math.random().toString(10).substring(1)
-const userid = '604e3e30d6ce6355c594ed84'
+const userid = '6050c70cba2ed1601dd2d4a3'
 
 const user = {
     username: randomstring,
@@ -58,8 +58,8 @@ const getAllUsers = () => {
                 .get('/user')
                 .end((error, response) => {
                     response.should.have.a.status(StatusCode.OK)
-                    response.should.be.a('array')
-                    response.should.be.eq(response.body.lenght)
+                    response.body.should.be.a('array')
+                    response.body.length.should.be.eq(response.body.length)
                     done()
                 })
         })
@@ -85,7 +85,12 @@ const updateUser = () => {
 const deleteUser = () => {
     describe('Testing POST/CREATE method for user', () => {
         it('Expecting deleting a user', (done) => {
-
+            Chai.request(app)
+                .delete(`/user/id/${userid}`)
+                .end((error, response) => {
+                    response.should.have.status(StatusCode.OK)
+                    done()
+                })
         })
 
     })
@@ -94,5 +99,7 @@ const deleteUser = () => {
 describe('TESTING THE USER_API ROUTE', () => {
     testingNonExistentRoute()
     createUser()
-    updateUser()
+    getAllUsers()
+    //updateUser()
+    //deleteUser()
 })

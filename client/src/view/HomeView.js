@@ -4,15 +4,18 @@ import Axios from 'axios'
 
 export const HomeView = () => {
 
-    const [data, setData] = useState()
+    const [data, setData] = useState([])
 
     //vår global variabel
     const [dataApi, setDataApi] = useContext(ApiContext)
 
     //hämta extern data från specifik länk, i detta fall people/1 aka the rescuer
     const fetchDataFromApi = () => {
-        Axios.get("https://swapi.dev/api/people/1")
-            .then((response) => setData(response.data)) //lagra datan vi hämtat, value ligger i data
+        Axios.get("http://localhost:3001/user")
+            .then((response) => {
+                console.log(response.data)
+                setData(response.data)
+            })
             .catch((error) => console.log(error)) //ifall vi failar att hämta data
     }
 
@@ -25,18 +28,28 @@ export const HomeView = () => {
     const displayData = () => {
         if (data) {
             return <div>
-                <h3>Name: {data.name}</h3>
-                <h3>Height: {data.height}</h3>
-                <h3>Gender: {data.gender}</h3>
-                {setDataApi(data.name)}
-                {console.log(dataApi)}
+                <ul>
+                    {data.map(user => {
+                        return (
+                            <li key={user._id}>
+                                Username: {user.username} - Password: {user.password} - Created: {user.createdAt}
+                            </li>
+                        )
+                    })}
+                </ul>
+                {/*
+                <h3>Id: {data._id}</h3>
+                <h3>Name: {data.username}</h3>
+                <h3>Password: {data.password}</h3>
+                {setDataApi(data.username)}
+                {console.log(dataApi)}*/}
             </div>
         }
     }
 
     return (
         <div>
-            <h1>Har endast fokuserat på react-delen, så ganska fattig design - satsar ofc till slutprojektet</h1>
+            <h1>Mest fokus på backend-delen än design!</h1>
             {displayData()}
             <button onClick={() => fetchDataFromApi()}>Testa hämta data manuellt med knapp</button>
         </div>

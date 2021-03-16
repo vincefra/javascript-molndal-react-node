@@ -5,10 +5,21 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import UserRoutes from './src/routes/User.routes.js'
+import cors from 'cors'
 
 dotenv.config() //instansiera
 
 const app = express()
+
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+//för tillåta cors request, alla länkar
+app.use(cors({ origin: true }));
 
 //gör kunna nå komplex objekt aka nested
 app.use(bodyParser.urlencoded({ extended: true }))
